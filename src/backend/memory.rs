@@ -51,8 +51,20 @@ impl Backend for Memory {
     }
 }
 
+impl Memory {
+    // Get the count of unique ip addresses for the user
+    fn unique_ip_addresses(&self, id: i64) -> usize {
+        match self.record.get(&id) {
+            Some(v) => v.iter().filter(|(_, &ip_addr)| ip_addr.is_some()).count(),
+            None => 0,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use std::net::Ipv4Addr;
+
     use super::*;
 
     #[test]
@@ -116,5 +128,30 @@ mod tests {
 
         assert_eq!(mem.request_count(12348591), 0);
         assert_eq!(mem.request_count(12384), 0);
+    }
+
+    #[test]
+    fn test_unique_ip_addresses() {
+        let mut mem = Memory::new();
+
+        assert_eq!(mem.len(), 0);
+
+        assert!(mem
+            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .is_ok());
+        assert!(mem
+            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .is_ok());
+        assert!(mem
+            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .is_ok());
+        assert!(mem
+            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .is_ok());
+        assert!(mem
+            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .is_ok());
+
+        assert_eq!(mem.unique_ip_addresses(12348591), 5);
     }
 }

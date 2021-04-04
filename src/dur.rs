@@ -20,13 +20,7 @@ where
 
     pub fn request(&mut self, id: i64, ip_addr: Option<IpAddr>) -> bool {
         match self.backend.insert(id, ip_addr) {
-            Ok(v) => {
-                if v as u32 > self.config.limit() {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
+            Ok(v) => v as u32 > self.config.limit(),
 
             // TODO: handle error better
             Err(why) => {
