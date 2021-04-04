@@ -13,3 +13,12 @@ impl Dur {
         }
     }
 }
+
+impl Default for Dur {
+    fn default() -> Self {
+        Self {
+            backend: Backend::Memory,
+            config: Config::default(),
+        }
+    }
+}

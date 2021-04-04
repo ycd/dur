@@ -1,5 +1,5 @@
 mod backend;
-
-// use types::Backend;
+mod memory;
 
 pub use backend::Backend;
+pub use memory::Memory;
