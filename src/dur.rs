@@ -1,10 +1,10 @@
-use std::error::Error;
+use std::net::IpAddr;
 
 use crate::{Backend, Config};
 
 pub struct Dur<T> {
     backend: T,
-    config: Config,
+    pub config: Config,
 }
 
 impl<T> Dur<T>
@@ -18,7 +18,21 @@ where
         }
     }
 
-    // pub fn increment(&mut self) {
-    //     self.backend
-    // }
+    pub fn request(&mut self, id: i64, ip_addr: Option<IpAddr>) -> bool {
+        match self.backend.insert(id, ip_addr) {
+            Ok(v) => {
+                if v as u32 > self.config.limit() {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            // TODO: handle error better
+            Err(why) => {
+                eprintln!("an error occured: {}", why);
+                false
+            }
+        }
+    }
 }

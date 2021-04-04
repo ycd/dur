@@ -16,6 +16,14 @@ impl Config {
             ip_addr_limit: ip_addr_limit.unwrap_or(16 as u16),
         }
     }
+
+    pub fn limit(&self) -> u32 {
+        self.limit as u32
+    }
+
+    pub fn ip_addr_limit(&self) -> u16 {
+        self.ip_addr_limit as u16
+    }
 }
 
 impl Default for Config {
