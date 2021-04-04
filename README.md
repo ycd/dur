@@ -1,10 +1,11 @@
 <div align="center">
-<h1>dur</h1>
+
+![](assets/dur.png)
 
 [dur](https://github.com/ycd/dur) lightweight, stateless, configurable rate limiter with extremely high-performance.   
 
 
-![](assets/dur.png)
+
 
 </div>
 
