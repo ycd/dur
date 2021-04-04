@@ -7,7 +7,7 @@ use std::{
 
 use crate::Backend;
 // In memory baceknd for dur
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Memory {
     record: HashMap<u64, HashMap<Duration, Option<IpAddr>>>,
 }
@@ -43,7 +43,7 @@ impl Backend for Memory {
     }
 
     // Get the current request count of the id
-    fn request_count(&mut self, id: u64) -> usize {
+    fn request_count(&self, id: u64) -> usize {
         match self.record.get(&id) {
             None => 0,
             Some(v) => v.len(),

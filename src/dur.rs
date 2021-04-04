@@ -2,6 +2,7 @@ use std::{net::IpAddr, time::SystemTime};
 
 use crate::{Backend, Config};
 
+#[derive(Debug, Clone)]
 pub struct Dur<T> {
     backend: T,
     pub config: Config,
@@ -31,7 +32,7 @@ where
                     self.config.window_time(),
                 );
 
-                v as u32 > self.config.limit()
+                (v as u32) < self.config.limit()
             }
 
             // TODO: handle error better
@@ -40,6 +41,10 @@ where
                 false
             }
         }
+    }
+
+    pub fn remaning_requests(&self, id: u64) -> u32 {
+        self.backend.request_count(id) as u32
     }
 }
 

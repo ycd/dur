@@ -12,5 +12,5 @@ pub trait Backend {
         ip_addr: Option<std::net::IpAddr>,
     ) -> Result<usize, Box<dyn Error>>;
     fn len(&self) -> usize;
-    fn request_count(&mut self, id: u64) -> usize;
+    fn request_count(&self, id: u64) -> usize;
 }

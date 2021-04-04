@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct Config {
     // The maximum limit for a user with the given id
     // can send maximum request in a single period.
