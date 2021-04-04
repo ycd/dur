@@ -6,23 +6,18 @@ use serde::Serialize;
 use crate::Memory;
 
 #[derive(Serialize)]
-struct Health<T, V>
+struct Health<T>
 where
     T: Into<String>,
-    V: Into<String>,
 {
     status: T,
-    version: V,
 }
 
 #[get("/health")]
 pub async fn get_health() -> HttpResponse {
     HttpResponse::Ok()
         .content_type("application/json")
-        .json(Health {
-            status: "ok",
-            version: env!("CARGO_PKG_VERSION"),
-        })
+        .json(Health { status: "ok" })
 }
 
 #[derive(Serialize)]

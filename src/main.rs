@@ -2,7 +2,6 @@ mod api;
 mod backend;
 mod config;
 mod dur;
-mod errors;
 mod helpers;
 
 use std::sync::Mutex;
