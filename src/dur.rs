@@ -19,7 +19,7 @@ where
         }
     }
 
-    pub fn request(&mut self, id: u64, ip_addr: Option<IpAddr>) -> bool {
+    pub fn request(&mut self, id: u64, ip_addr: Option<IpAddr>) -> (bool, usize) {
         match self.backend.insert(id, ip_addr) {
             Ok(v) => {
                 let current_timestamp = SystemTime::now()
@@ -32,13 +32,13 @@ where
                     self.config.window_time(),
                 );
 
-                (v as u32) < self.config.limit()
+                ((v as u32) < self.config.limit(), v)
             }
 
             // TODO: handle error better
             Err(why) => {
                 eprintln!("an error occured: {}", why);
-                false
+                (false, 0)
             }
         }
     }

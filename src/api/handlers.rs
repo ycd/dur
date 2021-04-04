@@ -35,15 +35,15 @@ pub async fn new_request(
     path: web::Path<(u64,)>,
     data: web::Data<Mutex<crate::Dur<Memory>>>,
 ) -> impl Responder {
-    let mut _data = data.lock().unwrap();
     let id = path.into_inner().0;
+    let mut _data = data.lock().unwrap();
 
-    let allowed = _data.request(id, None);
+    let request = _data.request(id, None);
 
-    let remaning_requests: i32 = _data.config.limit() as i32 - _data.remaning_requests(id) as i32;
+    let remaning_requests: i32 = _data.config.limit() as i32 - request.1 as i32;
 
     HttpResponse::Ok()
-        .json(LimitResponse { allowed: allowed })
+        .json(LimitResponse { allowed: request.0 })
         .with_header("X-Ratelimit-Remaning", remaning_requests.to_string())
         .with_header("X-Ratelimit-Limit", _data.config.limit().to_string())
 }

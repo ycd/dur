@@ -5,7 +5,7 @@ mod dur;
 mod errors;
 mod helpers;
 
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
 
 pub use backend::{Backend, Memory};
 pub use config::Config;
