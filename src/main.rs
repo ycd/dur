@@ -16,11 +16,11 @@ pub use dur::Dur;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let mut dur = Dur::new(Memory::new(), None);
+    let data = web::Data::new(Mutex::new(Dur::new(Memory::new(), None)));
 
     HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(Mutex::new(dur.clone())))
+            .app_data(data.clone())
             .service(api::get_health)
             .service(api::new_request)
     })
