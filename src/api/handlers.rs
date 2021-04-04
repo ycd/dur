@@ -1,9 +1,9 @@
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
 
-use actix_web::{get, post, web, HttpResponse, Responder};
+use actix_web::{get, web, HttpResponse, Responder};
 use serde::Serialize;
 
-use crate::{Backend, Memory};
+use crate::Memory;
 
 #[derive(Serialize)]
 struct Health<T, V>
@@ -33,14 +33,14 @@ struct LimitResponse {
 #[get("/request/{id}")]
 pub async fn new_request(
     path: web::Path<(u64,)>,
-    data: web::Data<Arc<Mutex<crate::Dur<Memory>>>>,
+    data: web::Data<Mutex<crate::Dur<Memory>>>,
 ) -> impl Responder {
     let mut _data = data.lock().unwrap();
     let id = path.into_inner().0;
 
     let allowed = _data.request(id, None);
 
-    let remaning_requests = _data.remaning_requests(id);
+    let remaning_requests: i32 = _data.config.limit() as i32 - _data.remaning_requests(id) as i32;
 
     HttpResponse::Ok()
         .json(LimitResponse { allowed: allowed })

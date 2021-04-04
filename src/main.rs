@@ -20,7 +20,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(Arc::new(Mutex::new(dur.clone()))))
+            .app_data(web::Data::new(Mutex::new(dur.clone())))
             .service(api::get_health)
             .service(api::new_request)
     })
