@@ -1,24 +1,24 @@
+use std::error::Error;
+
 use crate::{Backend, Config};
 
-pub struct Dur {
-    backend: Backend,
+pub struct Dur<T> {
+    backend: T,
     config: Config,
 }
 
-impl Dur {
-    pub fn new(backend: Backend, config: Option<Config>) -> Self {
+impl<T> Dur<T>
+where
+    T: Backend,
+{
+    pub fn new(backend: T, config: Option<Config>) -> Self {
         Self {
-            backend: Backend::Memory,
+            backend: backend,
             config: config.unwrap_or_default(),
         }
     }
-}
 
-impl Default for Dur {
-    fn default() -> Self {
-        Self {
-            backend: Backend::Memory,
-            config: Config::default(),
-        }
-    }
+    // pub fn increment(&mut self) {
+    //     self.backend
+    // }
 }

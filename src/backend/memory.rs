@@ -4,21 +4,23 @@ use std::{
     net::IpAddr,
     time::{Duration, SystemTime},
 };
+
+use crate::Backend;
 // In memory baceknd for dur
 #[derive(Debug)]
 pub struct Memory {
     record: HashMap<i64, HashMap<Duration, Option<IpAddr>>>,
 }
 
-impl Memory {
-    pub fn new() -> Self {
+impl Backend for Memory {
+    fn new() -> Self {
         Self {
             record: HashMap::new(),
         }
     }
 
     // inserts the incoming request to the
-    pub fn insert(
+    fn insert(
         &mut self,
         id: i64,
         ip_addr: Option<std::net::IpAddr>,
@@ -32,16 +34,16 @@ impl Memory {
         Ok(key.len())
     }
 
-    pub fn clear(&mut self) {
+    fn clear(&mut self) {
         self.record.clear();
     }
 
-    pub fn len(&mut self) -> usize {
+    fn len(&self) -> usize {
         self.record.len()
     }
 
     // Get the current request count of the id
-    pub fn request_count(&mut self, id: i64) -> usize {
+    fn request_count(&mut self, id: i64) -> usize {
         match self.record.get(&id) {
             None => 0,
             Some(v) => v.len(),
