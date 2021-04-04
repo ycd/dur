@@ -8,5 +8,11 @@ pub use config::Config;
 pub use dur::Dur;
 
 fn main() {
-    Dur::new(Memory::new(), None);
+    let mut dur = Dur::new(Memory::new(), None);
+
+    dur.request(1239812419, None);
+    dur.request(1239812419, None);
+    dur.request(1239812419, None);
+    dur.request(1239812419, None);
+    dur.request(1239812419, None);
 }

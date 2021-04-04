@@ -9,7 +9,7 @@ use crate::Backend;
 // In memory baceknd for dur
 #[derive(Debug)]
 pub struct Memory {
-    record: HashMap<i64, HashMap<Duration, Option<IpAddr>>>,
+    record: HashMap<u64, HashMap<Duration, Option<IpAddr>>>,
 }
 
 impl Backend for Memory {
@@ -22,7 +22,7 @@ impl Backend for Memory {
     // inserts the incoming request to the
     fn insert(
         &mut self,
-        id: i64,
+        id: u64,
         ip_addr: Option<std::net::IpAddr>,
     ) -> Result<usize, Box<dyn Error>> {
         let key = self.record.entry(id).or_insert(HashMap::new());
@@ -43,17 +43,30 @@ impl Backend for Memory {
     }
 
     // Get the current request count of the id
-    fn request_count(&mut self, id: i64) -> usize {
+    fn request_count(&mut self, id: u64) -> usize {
         match self.record.get(&id) {
             None => 0,
             Some(v) => v.len(),
+        }
+    }
+
+    fn evict_older_timestamps(&mut self, id: u64, timestamp: Duration, window_time: u16) {
+        match self.record.get_mut(&id) {
+            Some(logs) => {
+                for (duration, _) in logs.clone().iter() {
+                    if (timestamp.as_secs() - duration.as_secs()) > window_time as u64 {
+                        logs.remove(duration);
+                    }
+                }
+            }
+            None => return,
         }
     }
 }
 
 impl Memory {
     // Get the count of unique ip addresses for the user
-    fn unique_ip_addresses(&self, id: i64) -> usize {
+    fn unique_ip_addresses(&self, id: u64) -> usize {
         match self.record.get(&id) {
             Some(v) => v.iter().filter(|(_, &ip_addr)| ip_addr.is_some()).count(),
             None => 0,
