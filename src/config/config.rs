@@ -11,14 +11,26 @@ pub struct Config {
 
     // Window time in seconds.
     window_time: u16,
+
+    port: String,
+
+    host: String,
 }
 
 impl Config {
-    pub fn new(limit: Option<u32>, ip_addr_limit: Option<u16>, window_time: Option<u16>) -> Self {
+    pub fn new(
+        limit: Option<u32>,
+        ip_addr_limit: Option<u16>,
+        window_time: Option<u16>,
+        port: Option<String>,
+        host: Option<String>,
+    ) -> Self {
         Self {
             limit: limit.unwrap_or(50 as u32),
             ip_addr_limit: ip_addr_limit.unwrap_or(16 as u16),
             window_time: window_time.unwrap_or(300 as u16),
+            port: port.unwrap_or("8000".to_owned()),
+            host: host.unwrap_or("127.0.0.1".to_owned()),
         }
     }
 
@@ -51,6 +63,11 @@ impl Config {
 
         self.window_time
     }
+
+    pub fn host_and_port(&self) -> String {
+        let host_and_port = vec![self.host.clone(), self.port.clone()];
+        host_and_port.join(":").to_owned()
+    }
 }
 
 impl Default for Config {
@@ -59,6 +76,8 @@ impl Default for Config {
             limit: 50 as u32,
             ip_addr_limit: 5 as u16,
             window_time: 300 as u16,
+            host: "127.0.0.1".to_owned(),
+            port: "8000".to_owned(),
         }
     }
 }
