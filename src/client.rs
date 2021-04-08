@@ -77,8 +77,7 @@ pub fn cli() -> Config {
     let host = matches.value_of(options::HOST).unwrap().to_owned();
 
     match matches.value_of(options::CONFIG_PATH) {
-        // TODO: implement config
-        Some(_) => unimplemented!(),
+        Some(path) => Config::from_path(path.to_owned()),
         None => Config::new(Some(limit), Some(ip_addr_limit), Some(window_time), Some(port), Some(host))
     }   
 }

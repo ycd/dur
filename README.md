@@ -35,8 +35,6 @@ Sliding window log algorithm keeps a log of request timestamps for each user. Wh
 ## Example Configuration File
 
 ```toml
-[config]
-
 # the limit inside a window
 limit = 300
 
@@ -46,7 +44,10 @@ window_time = 300
 # The maximum number of unique ip addresses for one user inside a window
 ip_addr_limit = 5
 
-# Explicitly rate limiting some endpoints.
+host = "127.0.0.1"
+
+port = "8000"
+
 [limits.path]
 
 paths = [
@@ -54,10 +55,8 @@ paths = [
   "/explicitly/limiting",
 ]
 
-
 limit = 20
 
-# Explicitly rate limiting specific IP addresses.
 [limits.ip]
 
 ip_addresses = [

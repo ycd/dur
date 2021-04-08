@@ -1,4 +1,7 @@
-#[derive(Debug, Clone)]
+#[macro_use]
+use serde::Deserialize;
+
+#[derive(Debug, Clone, Deserialize)]
 pub struct Config {
     // The maximum limit for a user with the given id
     // can send maximum request in a single period.
