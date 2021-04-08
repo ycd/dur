@@ -1,0 +1,30 @@
+[config]
+
+# the limit inside a window
+limit = 300
+
+# Window time in seconds.
+window_time = 300
+
+# The maximum number of unique ip addresses for one user inside a window
+ip_addr_limit = 5
+
+[limits.path]
+
+paths = [
+  "/abc/def/gef/asdf",
+  "/explicitly/limiting",
+]
+
+limit = 20
+
+[limits.ip]
+
+ip_addresses = [
+  "10.27.104.11",
+  "10.27.104.12",
+]
+
+limit = 100
+
+window_time = 50
