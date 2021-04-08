@@ -10,7 +10,6 @@
 </div>
 
 
-
 ---
 
 ## Features
@@ -98,6 +97,7 @@ OPTIONS:
 
 ---
 
+
 ## Installation
 
 TODO: Provide a docker image
@@ -141,6 +141,13 @@ GET /request/<id>
     "allow": true
 }
 ```
+
+## TODO 
+
+* [ ] Return metadata of unique id in the request
+* [ ] Add support for redis
+* [ ] Add support for IP based rate limiting
+* [ ] Add support for path based rate limiting
 
 ## Licence
 
