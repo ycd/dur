@@ -66,6 +66,7 @@ impl Backend for Memory {
 
 impl Memory {
     // Get the count of unique ip addresses for the user
+    #[allow(dead_code)]
     fn unique_ip_addresses(&self, id: u64) -> usize {
         match self.record.get(&id) {
             Some(v) => v.iter().filter(|(_, &ip_addr)| ip_addr.is_some()).count(),

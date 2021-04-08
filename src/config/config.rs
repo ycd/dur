@@ -1,4 +1,3 @@
-#[macro_use]
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]
