@@ -7,7 +7,7 @@ window_time = 300
 # The maximum number of unique ip addresses for one user inside a window
 ip_addr_limit = 5
 
-host = "127.0.0.1"
+host = "0.0.0.0"
 
 port = "8000"
 

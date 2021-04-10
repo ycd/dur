@@ -8,6 +8,7 @@ impl Config {
         let mut contents = String::new();
         file.read_to_string(&mut contents).unwrap();
         let config: Config = toml::from_str(&contents).unwrap();
+        println!("{:#?}", config);
         config
     }
 }

@@ -1,5 +1,7 @@
 use serde::Deserialize;
 
+use super::{Ip, Path};
+
 #[derive(Debug, Clone, Deserialize)]
 pub struct Config {
     // The maximum limit for a user with the given id
@@ -14,9 +16,26 @@ pub struct Config {
     // Window time in seconds.
     window_time: u16,
 
-    port: String,
+    port: Option<String>,
 
-    host: String,
+    host: Option<String>,
+
+    limits: Option<Limits>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+struct Limits {
+    path: Option<Path>,
+    ip: Option<Ip>,
+}
+
+impl Default for Limits {
+    fn default() -> Self {
+        Self {
+            path: Some(Path::new(vec![String::new(); 0], 50, 300)),
+            ip: Some(Ip::new(vec![String::new(); 0], 50, 300)),
+        }
+    }
 }
 
 impl Config {
@@ -31,8 +50,9 @@ impl Config {
             limit: limit.unwrap_or(50 as u32),
             ip_addr_limit: ip_addr_limit.unwrap_or(16 as u16),
             window_time: window_time.unwrap_or(300 as u16),
-            port: port.unwrap_or("8000".to_owned()),
-            host: host.unwrap_or("127.0.0.1".to_owned()),
+            port: Some(port.unwrap_or("8000".to_owned())),
+            host: Some(host.unwrap_or("127.0.0.1".to_owned())),
+            limits: Some(Limits::default()),
         }
     }
 
@@ -67,7 +87,7 @@ impl Config {
     }
 
     pub fn host_and_port(&self) -> String {
-        let host_and_port = vec![self.host.clone(), self.port.clone()];
+        let host_and_port = vec![self.host.clone().unwrap(), self.port.clone().unwrap()];
         host_and_port.join(":").to_owned()
     }
 }
@@ -78,8 +98,9 @@ impl Default for Config {
             limit: 50 as u32,
             ip_addr_limit: 5 as u16,
             window_time: 300 as u16,
-            host: "127.0.0.1".to_owned(),
-            port: "8000".to_owned(),
+            host: Some("127.0.0.1".to_owned()),
+            port: Some("8000".to_owned()),
+            limits: Some(Limits::default()),
         }
     }
 }
