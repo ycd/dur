@@ -1,7 +1,7 @@
 use std::{
     collections::HashMap,
     error::Error,
-    net::IpAddr,
+    net::Ipv4Addr,
     time::{Duration, SystemTime},
 };
 
@@ -13,16 +13,16 @@ pub struct Memory {
 }
 #[derive(Debug, Clone)]
 pub struct IpAndPath {
-    ip: Option<IpAddr>,
+    ip: Option<Ipv4Addr>,
     path: Option<String>,
 }
 
 impl IpAndPath {
-    pub fn new(ip: Option<IpAddr>, path: Option<String>) -> Self {
+    pub fn new(ip: Option<Ipv4Addr>, path: Option<String>) -> Self {
         Self { ip: ip, path: path }
     }
 
-    pub fn from_ip_addr(ip: IpAddr) -> Self {
+    pub fn from_ip_addr(ip: Ipv4Addr) -> Self {
         Self {
             ip: Some(ip),
             path: None,
@@ -174,41 +174,31 @@ mod tests {
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
-                    127, 0, 0, 1
-                ))))
+                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
             )
             .is_ok());
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
-                    127, 0, 0, 1
-                ))))
+                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
             )
             .is_ok());
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
-                    127, 0, 0, 1
-                ))))
+                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
             )
             .is_ok());
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
-                    127, 0, 0, 1
-                ))))
+                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
             )
             .is_ok());
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
-                    127, 0, 0, 1
-                ))))
+                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
             )
             .is_ok());
 
