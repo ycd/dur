@@ -6,7 +6,7 @@ mod dur;
 mod helpers;
 use std::sync::Mutex;
 
-pub use backend::{Backend, Memory};
+pub use backend::{Backend, IpAndPath, Memory};
 pub use config::Config;
 
 use actix_web::{web, App, HttpServer};

@@ -9,7 +9,32 @@ use crate::Backend;
 // In memory baceknd for dur
 #[derive(Debug, Clone)]
 pub struct Memory {
-    record: HashMap<u64, HashMap<Duration, Option<IpAddr>>>,
+    record: HashMap<u64, HashMap<Duration, Option<IpAndPath>>>,
+}
+#[derive(Debug, Clone)]
+pub struct IpAndPath {
+    ip: Option<IpAddr>,
+    path: Option<String>,
+}
+
+impl IpAndPath {
+    pub fn new(ip: Option<IpAddr>, path: Option<String>) -> Self {
+        Self { ip: ip, path: path }
+    }
+
+    pub fn from_ip_addr(ip: IpAddr) -> Self {
+        Self {
+            ip: Some(ip),
+            path: None,
+        }
+    }
+
+    pub fn from_path(path: String) -> Self {
+        Self {
+            ip: None,
+            path: Some(path),
+        }
+    }
 }
 
 impl Backend for Memory {
@@ -20,15 +45,11 @@ impl Backend for Memory {
     }
 
     // inserts the incoming request to the
-    fn insert(
-        &mut self,
-        id: u64,
-        ip_addr: Option<std::net::IpAddr>,
-    ) -> Result<usize, Box<dyn Error>> {
+    fn insert(&mut self, id: u64, ip_and_path: Option<IpAndPath>) -> Result<usize, Box<dyn Error>> {
         let key = self.record.entry(id).or_insert(HashMap::new());
         key.insert(
             SystemTime::now().duration_since(std::time::UNIX_EPOCH)?,
-            ip_addr,
+            ip_and_path,
         );
 
         Ok(key.len())
@@ -64,16 +85,16 @@ impl Backend for Memory {
     }
 }
 
-impl Memory {
-    // Get the count of unique ip addresses for the user
-    #[allow(dead_code)]
-    fn unique_ip_addresses(&self, id: u64) -> usize {
-        match self.record.get(&id) {
-            Some(v) => v.iter().filter(|(_, &ip_addr)| ip_addr.is_some()).count(),
-            None => 0,
-        }
-    }
-}
+// impl Memory {
+//     // Get the count of unique ip addresses for the user
+//     #[allow(dead_code)]
+//     fn unique_ip_addresses(&self, id: u64) -> usize {
+//         match self.record.get(&id) {
+//             Some(v) => v.iter().filter(|(_, &ip_addr)| ip_addr.is_some()).count(),
+//             None => 0,
+//         }
+//     }
+// }
 
 #[cfg(test)]
 mod tests {
@@ -151,21 +172,46 @@ mod tests {
         assert_eq!(mem.len(), 0);
 
         assert!(mem
-            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .insert(
+                12348591,
+                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
+                    127, 0, 0, 1
+                ))))
+            )
             .is_ok());
         assert!(mem
-            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .insert(
+                12348591,
+                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
+                    127, 0, 0, 1
+                ))))
+            )
             .is_ok());
         assert!(mem
-            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .insert(
+                12348591,
+                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
+                    127, 0, 0, 1
+                ))))
+            )
             .is_ok());
         assert!(mem
-            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .insert(
+                12348591,
+                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
+                    127, 0, 0, 1
+                ))))
+            )
             .is_ok());
         assert!(mem
-            .insert(12348591, Some(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))))
+            .insert(
+                12348591,
+                Some(IpAndPath::from_ip_addr(IpAddr::V4(Ipv4Addr::new(
+                    127, 0, 0, 1
+                ))))
+            )
             .is_ok());
 
-        assert_eq!(mem.unique_ip_addresses(12348591), 5);
+        // assert_eq!(mem.unique_ip_addresses(12348591), 5);
     }
 }

@@ -1,6 +1,6 @@
-use std::{net::IpAddr, time::SystemTime};
+use std::time::SystemTime;
 
-use crate::{Backend, Config};
+use crate::{Backend, Config, IpAndPath};
 
 #[derive(Debug, Clone)]
 pub struct Dur<T> {
@@ -19,8 +19,8 @@ where
         }
     }
 
-    pub fn request(&mut self, id: u64, ip_addr: Option<IpAddr>) -> (bool, usize) {
-        match self.backend.insert(id, ip_addr) {
+    pub fn request(&mut self, id: u64, ip_and_path: Option<IpAndPath>) -> (bool, usize) {
+        match self.backend.insert(id, ip_and_path) {
             Ok(v) => {
                 let current_timestamp = SystemTime::now()
                     .duration_since(std::time::UNIX_EPOCH)
