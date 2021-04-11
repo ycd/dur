@@ -100,6 +100,95 @@ impl Config {
         let host_and_port = vec![self.host.clone().unwrap(), self.port.clone().unwrap()];
         host_and_port.join(":").to_owned()
     }
+
+    pub(crate) fn limits_is_some(&self) -> bool {
+        self.limits.is_some()
+    }
+
+    pub fn limit_path_is_some(&self) -> bool {
+        if self.limits_is_some() {
+            return self.limits.as_ref().unwrap().path.is_some();
+        }
+
+        false
+    }
+
+    pub fn limit_ip_is_some(&self) -> bool {
+        if self.limits_is_some() {
+            return self.limits.as_ref().unwrap().ip.is_some();
+        }
+
+        false
+    }
+
+    pub fn limited_paths(&self) -> Option<Vec<String>> {
+        if self.limit_path_is_some() {
+            return self.limits.as_ref().unwrap().path.as_ref().unwrap().paths();
+        }
+
+        None
+    }
+
+    pub fn path_limit(&self) -> Option<u16> {
+        if self.limit_path_is_some() {
+            return self.limits.as_ref().unwrap().path.as_ref().unwrap().limit();
+        }
+
+        None
+    }
+
+    pub fn path_window_time(&self) -> Option<u16> {
+        if self.limit_path_is_some() {
+            return self
+                .limits
+                .as_ref()
+                .unwrap()
+                .path
+                .as_ref()
+                .unwrap()
+                .window_time();
+        }
+
+        None
+    }
+
+    pub fn limited_ip_addresses(&self) -> Option<Vec<String>> {
+        if self.limit_ip_is_some() {
+            return self
+                .limits
+                .as_ref()
+                .unwrap()
+                .ip
+                .as_ref()
+                .unwrap()
+                .ip_addresses();
+        }
+
+        None
+    }
+
+    pub fn ip_addresses_limit(&self) -> Option<u16> {
+        if self.limit_ip_is_some() {
+            return self.limits.as_ref().unwrap().ip.as_ref().unwrap().limit();
+        }
+
+        None
+    }
+
+    pub fn ip_addresses_window_time(&self) -> Option<u16> {
+        if self.limit_ip_is_some() {
+            return self
+                .limits
+                .as_ref()
+                .unwrap()
+                .ip
+                .as_ref()
+                .unwrap()
+                .window_time();
+        }
+
+        None
+    }
 }
 
 impl Default for Config {

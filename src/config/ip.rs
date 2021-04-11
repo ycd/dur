@@ -19,6 +19,18 @@ impl Ip {
             window_time: Some(window_time),
         }
     }
+
+    pub fn ip_addresses(&self) -> Option<Vec<String>> {
+        self.ip_addresses.clone()
+    }
+
+    pub fn window_time(&self) -> Option<u16> {
+        self.window_time
+    }
+
+    pub fn limit(&self) -> Option<u16> {
+        self.limit
+    }
 }
 
 #[cfg(test)]

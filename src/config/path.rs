@@ -19,6 +19,18 @@ impl Path {
             window_time: Some(window_time),
         }
     }
+
+    pub fn paths(&self) -> Option<Vec<String>> {
+        self.paths.clone()
+    }
+
+    pub fn window_time(&self) -> Option<u16> {
+        self.window_time
+    }
+
+    pub fn limit(&self) -> Option<u16> {
+        self.limit
+    }
 }
 
 #[cfg(test)]
