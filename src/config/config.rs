@@ -1,3 +1,5 @@
+use std::net::Ipv4Addr;
+
 use serde::Deserialize;
 
 use super::{Ip, Path};
@@ -27,15 +29,6 @@ pub struct Config {
 pub struct Limits {
     path: Option<Path>,
     ip: Option<Ip>,
-}
-
-impl Default for Limits {
-    fn default() -> Self {
-        Self {
-            path: Some(Path::new(vec![String::new(); 0], 50, 300)),
-            ip: Some(Ip::new(vec![String::new(); 0], 50, 300)),
-        }
-    }
 }
 
 impl Limits {
@@ -152,7 +145,7 @@ impl Config {
         None
     }
 
-    pub fn limited_ip_addresses(&self) -> Option<Vec<String>> {
+    pub fn limited_ip_addresses(&self) -> Option<Vec<Ipv4Addr>> {
         if self.limit_ip_is_some() {
             return self
                 .limits
@@ -199,7 +192,7 @@ impl Default for Config {
             window_time: 300 as u16,
             host: Some("127.0.0.1".to_owned()),
             port: Some("8000".to_owned()),
-            limits: Some(Limits::default()),
+            limits: Some(Limits::empty()),
         }
     }
 }

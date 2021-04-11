@@ -13,8 +13,8 @@ pub struct Memory {
 }
 #[derive(Debug, Clone)]
 pub struct IpAndPath {
-    ip: Option<Ipv4Addr>,
-    path: Option<String>,
+    pub ip: Option<Ipv4Addr>,
+    pub path: Option<String>,
 }
 
 impl IpAndPath {
@@ -83,18 +83,17 @@ impl Backend for Memory {
             None => return,
         }
     }
-}
 
-// impl Memory {
-//     // Get the count of unique ip addresses for the user
-//     #[allow(dead_code)]
-//     fn unique_ip_addresses(&self, id: u64) -> usize {
-//         match self.record.get(&id) {
-//             Some(v) => v.iter().filter(|(_, &ip_addr)| ip_addr.is_some()).count(),
-//             None => 0,
-//         }
-//     }
-// }
+    fn unique_ip_addresses(&self, id: u64) -> usize {
+        match self.record.get(&id) {
+            Some(v) => v
+                .iter()
+                .filter(|(_, ip_and_path)| ip_and_path.ip.is_some())
+                .count(),
+            None => 0,
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {

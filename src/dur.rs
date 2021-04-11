@@ -20,7 +20,7 @@ where
     }
 
     pub fn request(&mut self, id: u64, ip_and_path: IpAndPath) -> (bool, usize) {
-        match self.backend.insert(id, ip_and_path) {
+        match self.backend.insert(id, ip_and_path.clone()) {
             Ok(v) => {
                 let current_timestamp = SystemTime::now()
                     .duration_since(std::time::UNIX_EPOCH)
@@ -32,7 +32,38 @@ where
                     self.config.window_time(),
                 );
 
-                ((v as u32) < self.config.limit(), v)
+                let mut allow = true;
+
+                if (v as u32) < self.config.limit() {
+                    allow = false
+                }
+
+                match self.config.limited_ip_addresses() {
+                    // Some(limit) => {
+                    //     if limit as usize > self.backend.unique_ip_addresses(id) {
+                    //         allow = false
+                    //     }
+                    // }
+                    // None => (),
+                    Some(ip_addrs) => match ip_and_path.ip {
+                        Some(ref ip) => {
+                            if ip_addrs.contains(&ip.clone()) {
+                                match self.config.ip_addresses_limit() {
+                                    Some(limit) => {
+                                        if limit as usize > self.backend.unique_ip_addresses(id) {
+                                            allow = false
+                                        }
+                                    }
+                                    None => (),
+                                }
+                            }
+                        }
+                        None => (),
+                    },
+                    None => (),
+                }
+
+                (allow, v)
             }
 
             // TODO: handle error better

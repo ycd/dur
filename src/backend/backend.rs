@@ -11,4 +11,5 @@ pub trait Backend {
     fn insert(&mut self, id: u64, ip_and_path: IpAndPath) -> Result<usize, Box<dyn Error>>;
     fn len(&self) -> usize;
     fn request_count(&self, id: u64) -> usize;
+    fn unique_ip_addresses(&self, id: u64) -> usize;
 }
