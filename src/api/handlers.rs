@@ -1,7 +1,7 @@
 use std::sync::Mutex;
 
-use actix_web::{get, web, HttpResponse, Responder};
-use serde::Serialize;
+use actix_web::{get, post, web, HttpResponse, Responder};
+use serde::{Deserialize, Serialize};
 
 use crate::Memory;
 
@@ -25,16 +25,22 @@ struct LimitResponse {
     allowed: bool,
 }
 
-#[get("/request/{id}")]
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Request {
+    id: u64,
+    path: Option<String>,
+    ip: Option<String>,
+}
+
+#[post("/request")]
 pub async fn new_request(
-    path: web::Path<(u64,)>,
+    payload: web::Json<Request>,
     data: web::Data<Mutex<crate::Dur<Memory>>>,
 ) -> impl Responder {
-    let id = path.into_inner().0;
     let mut _data = data.lock().unwrap();
 
-    let request = _data.request(id, None);
-
+    let request = _data.request(payload.id, None);
+    println!("{:#?}", payload);
     let remaning_requests: i32 = _data.config.limit() as i32 - request.1 as i32;
 
     HttpResponse::Ok()
