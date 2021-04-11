@@ -39,12 +39,7 @@ where
                 }
 
                 match self.config.limited_ip_addresses() {
-                    // Some(limit) => {
-                    //     if limit as usize > self.backend.unique_ip_addresses(id) {
-                    //         allow = false
-                    //     }
-                    // }
-                    // None => (),
+                    // TODO(ycd): properly test here.
                     Some(ip_addrs) => match ip_and_path.ip {
                         Some(ref ip) => {
                             if ip_addrs.contains(&ip.clone()) {
