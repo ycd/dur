@@ -10,6 +10,7 @@ pub struct Ip {
 }
 
 impl Ip {
+    #[allow(dead_code)]
     pub fn new<I, T>(ip_addrs: I, limit: u16, window_time: u16) -> Self
     where
         T: Into<Ipv4Addr>,

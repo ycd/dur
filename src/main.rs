@@ -4,6 +4,7 @@ mod client;
 mod config;
 mod dur;
 mod helpers;
+
 use std::sync::Mutex;
 
 pub use backend::{Backend, IpAndPath, Memory};

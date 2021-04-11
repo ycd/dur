@@ -8,6 +8,7 @@ pub struct Path {
 }
 
 impl Path {
+    #[allow(dead_code)]
     pub fn new<I, T>(endpoints: I, limit: u16, window_time: u16) -> Self
     where
         T: Into<String>,
