@@ -1,9 +1,9 @@
-use std::sync::Mutex;
+use std::{net::Ipv4Addr, str::FromStr, sync::Mutex};
 
 use actix_web::{get, post, web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 
-use crate::Memory;
+use crate::{IpAndPath, Memory};
 
 #[derive(Serialize)]
 struct Health<T>
@@ -42,6 +42,11 @@ pub struct Request {
     ip: Option<String>,
 }
 
+#[derive(Serialize)]
+pub struct BadRequest {
+    error: String,
+}
+
 #[post("/request")]
 pub async fn new_request(
     payload: web::Json<Request>,
@@ -49,7 +54,21 @@ pub async fn new_request(
 ) -> impl Responder {
     let mut _data = data.lock().unwrap();
 
-    let request = _data.request(payload.id, None);
+    let ip_addr: Option<Ipv4Addr> = match payload.ip {
+        None => None,
+        Some(ref v) => match Ipv4Addr::from_str(v) {
+            Ok(ip) => Some(ip),
+            Err(_) => {
+                return HttpResponse::BadRequest()
+                    .json(BadRequest {
+                        error: format!("invalid ip address: {}", v),
+                    })
+                    .with_header("X-Ratelimit-Limit", _data.config.limit() as usize)
+            }
+        },
+    };
+
+    let request = _data.request(payload.id, IpAndPath::new(ip_addr, payload.path.clone()));
     let remaning_requests: i32 = _data.config.limit() as i32 - request.1 as i32;
 
     HttpResponse::Ok()

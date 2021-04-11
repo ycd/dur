@@ -9,7 +9,7 @@ use crate::Backend;
 // In memory baceknd for dur
 #[derive(Debug, Clone)]
 pub struct Memory {
-    record: HashMap<u64, HashMap<Duration, Option<IpAndPath>>>,
+    record: HashMap<u64, HashMap<Duration, IpAndPath>>,
 }
 #[derive(Debug, Clone)]
 pub struct IpAndPath {
@@ -45,7 +45,7 @@ impl Backend for Memory {
     }
 
     // inserts the incoming request to the
-    fn insert(&mut self, id: u64, ip_and_path: Option<IpAndPath>) -> Result<usize, Box<dyn Error>> {
+    fn insert(&mut self, id: u64, ip_and_path: IpAndPath) -> Result<usize, Box<dyn Error>> {
         let key = self.record.entry(id).or_insert(HashMap::new());
         key.insert(
             SystemTime::now().duration_since(std::time::UNIX_EPOCH)?,
@@ -106,17 +106,17 @@ mod tests {
     fn test_insert() {
         let mut mem = Memory::new();
 
-        assert!(mem.insert(1234859, None).is_ok());
+        assert!(mem.insert(1234859, IpAndPath::new(None, None)).is_ok());
     }
     #[test]
     fn test_insert_multiple() {
         let mut mem = Memory::new();
 
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
     }
 
     #[test]
@@ -125,15 +125,15 @@ mod tests {
 
         assert_eq!(mem.len(), 0);
 
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
 
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
 
         mem.clear();
         assert_eq!(mem.len(), 0);
@@ -145,15 +145,15 @@ mod tests {
 
         assert_eq!(mem.len(), 0);
 
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
-        assert!(mem.insert(12348591, None).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12348591, IpAndPath::new(None, None)).is_ok());
 
-        assert!(mem.insert(12384, None).is_ok());
-        assert!(mem.insert(12384, None).is_ok());
-        assert!(mem.insert(12384, None).is_ok());
+        assert!(mem.insert(12384, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12384, IpAndPath::new(None, None)).is_ok());
+        assert!(mem.insert(12384, IpAndPath::new(None, None)).is_ok());
 
         assert_eq!(mem.request_count(12348591), 5);
         assert_eq!(mem.request_count(12384), 3);
@@ -174,31 +174,31 @@ mod tests {
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
+                IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1))
             )
             .is_ok());
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
+                IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1))
             )
             .is_ok());
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
+                IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1))
             )
             .is_ok());
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
+                IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1))
             )
             .is_ok());
         assert!(mem
             .insert(
                 12348591,
-                Some(IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1)))
+                IpAndPath::from_ip_addr(Ipv4Addr::new(127, 0, 0, 1))
             )
             .is_ok());
 

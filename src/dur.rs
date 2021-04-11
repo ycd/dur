@@ -19,7 +19,7 @@ where
         }
     }
 
-    pub fn request(&mut self, id: u64, ip_and_path: Option<IpAndPath>) -> (bool, usize) {
+    pub fn request(&mut self, id: u64, ip_and_path: IpAndPath) -> (bool, usize) {
         match self.backend.insert(id, ip_and_path) {
             Ok(v) => {
                 let current_timestamp = SystemTime::now()
@@ -61,17 +61,17 @@ mod tests {
         let mut dur = Dur::new(Memory::new(), None);
         dur.config.set_window_time(1);
 
-        dur.request(12938102, None);
-        dur.request(12938102, None);
-        dur.request(12938102, None);
-        dur.request(12938102, None);
-        dur.request(12938102, None);
-        dur.request(12938102, None);
+        dur.request(12938102, IpAndPath::new(None, None));
+        dur.request(12938102, IpAndPath::new(None, None));
+        dur.request(12938102, IpAndPath::new(None, None));
+        dur.request(12938102, IpAndPath::new(None, None));
+        dur.request(12938102, IpAndPath::new(None, None));
+        dur.request(12938102, IpAndPath::new(None, None));
 
         assert_eq!(dur.backend.request_count(12938102), 6);
         sleep(std::time::Duration::from_secs(4));
 
-        dur.request(12938102, None);
+        dur.request(12938102, IpAndPath::new(None, None));
         assert_eq!(dur.backend.request_count(12938102), 1);
     }
 }
