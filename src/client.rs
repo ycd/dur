@@ -7,6 +7,7 @@ static VERSION: &str = env!("CARGO_PKG_VERSION");
 static ABOUT: &str =
     "dur, lightweight, stateless, configurable rate limiter with extremely high-performance";
 
+#[allow(dead_code)]
 mod options {
     pub const CONFIG_PATH: &str = "config-path";
     pub const PORT: &str = "port";
@@ -14,6 +15,12 @@ mod options {
     pub const LIMIT: &str = "limit";
     pub const WINDOW_TIME: &str = "window-time";
     pub const IP_ADDR_LIMIT: &str = "ipaddr-limit";
+    pub const PATHS: &str = "paths";
+    pub const PATH_LIMIT: &str = "path-limit";
+    pub const PATH_WINDOW_TIME: &str = "path-window-time";
+    pub const IP_ADDRESSES: &str = "ip-addresses";
+    pub const IP_ADDRESSES_LIMIT: &str = "ip-addresses-limit";
+    pub const IP_ADDRESSES_WINDOW_TIME: &str = "ip-addresses-window-time";
 }
 
 pub fn cli() -> Config {
@@ -78,6 +85,6 @@ pub fn cli() -> Config {
 
     match matches.value_of(options::CONFIG_PATH) {
         Some(path) => Config::from_path(path.to_owned()),
-        None => Config::new(Some(limit), Some(ip_addr_limit), Some(window_time), Some(port), Some(host))
+        None => Config::new(Some(limit), Some(ip_addr_limit), Some(window_time), Some(port), Some(host), None)
     }   
 }

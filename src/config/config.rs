@@ -24,7 +24,7 @@ pub struct Config {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-struct Limits {
+pub struct Limits {
     path: Option<Path>,
     ip: Option<Ip>,
 }
@@ -38,6 +38,15 @@ impl Default for Limits {
     }
 }
 
+impl Limits {
+    fn empty() -> Self {
+        Self {
+            path: None,
+            ip: None,
+        }
+    }
+}
+
 impl Config {
     pub fn new(
         limit: Option<u32>,
@@ -45,6 +54,7 @@ impl Config {
         window_time: Option<u16>,
         port: Option<String>,
         host: Option<String>,
+        limits: Option<Limits>,
     ) -> Self {
         Self {
             limit: limit.unwrap_or(50 as u32),
@@ -52,7 +62,7 @@ impl Config {
             window_time: window_time.unwrap_or(300 as u16),
             port: Some(port.unwrap_or("8000".to_owned())),
             host: Some(host.unwrap_or("127.0.0.1".to_owned())),
-            limits: Some(Limits::default()),
+            limits: Some(limits.unwrap_or(Limits::empty())),
         }
     }
 
