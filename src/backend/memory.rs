@@ -88,8 +88,21 @@ impl Backend for Memory {
         match self.record.get(&id) {
             Some(v) => v
                 .iter()
-                .filter(|(_, ip_and_path)| match ip_and_path.ip {
+                .filter(|(_, ip_and_path)| match ip_and_path.ip.clone() {
                     Some(addr) => addr == ip,
+                    None => false,
+                })
+                .count(),
+            None => 0,
+        }
+    }
+
+    fn path_count(&self, id: u64, path: String) -> usize {
+        match self.record.get(&id) {
+            Some(v) => v
+                .iter()
+                .filter(|(_, ip_and_path)| match ip_and_path.path.clone() {
+                    Some(_path) => _path == path,
                     None => false,
                 })
                 .count(),

@@ -60,6 +60,25 @@ where
                     None => (),
                 }
 
+                match self.config.limited_paths() {
+                    Some(paths) => match ip_and_path.path {
+                        Some(path) => {
+                            if paths.contains(&path.clone()) {
+                                match self.config.path_limit() {
+                                    Some(limit) => {
+                                        if (limit as usize) < self.backend.path_count(id, path) {
+                                            allow = false
+                                        }
+                                    }
+                                    None => (),
+                                }
+                            }
+                        }
+                        None => (),
+                    },
+                    None => (),
+                }
+
                 (allow, v)
             }
 

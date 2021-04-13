@@ -12,4 +12,5 @@ pub trait Backend {
     fn len(&self) -> usize;
     fn request_count(&self, id: u64) -> usize;
     fn ip_address_count(&self, id: u64, ip: Ipv4Addr) -> usize;
+    fn path_count(&self, id: u64, path: String) -> usize;
 }
