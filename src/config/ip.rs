@@ -5,13 +5,13 @@ use serde::Deserialize;
 #[derive(Debug, Clone, Deserialize)]
 pub struct Ip {
     ip_addresses: Option<Vec<Ipv4Addr>>,
-    limit: Option<u16>,
+    limit: Option<u32>,
     window_time: Option<u16>,
 }
 
 impl Ip {
     #[allow(dead_code)]
-    pub fn new<I, T>(ip_addrs: I, limit: u16, window_time: u16) -> Self
+    pub fn new<I, T>(ip_addrs: I, limit: u32, window_time: u16) -> Self
     where
         T: Into<Ipv4Addr>,
         I: IntoIterator<Item = T>,
@@ -31,7 +31,7 @@ impl Ip {
         self.window_time
     }
 
-    pub fn limit(&self) -> Option<u16> {
+    pub fn limit(&self) -> Option<u32> {
         self.limit
     }
 }

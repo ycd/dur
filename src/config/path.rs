@@ -3,13 +3,13 @@ use serde::Deserialize;
 #[derive(Debug, Clone, Deserialize)]
 pub struct Path {
     paths: Option<Vec<String>>,
-    limit: Option<u16>,
+    limit: Option<u32>,
     window_time: Option<u16>,
 }
 
 impl Path {
     #[allow(dead_code)]
-    pub fn new<I, T>(endpoints: I, limit: u16, window_time: u16) -> Self
+    pub fn new<I, T>(endpoints: I, limit: u32, window_time: u16) -> Self
     where
         T: Into<String>,
         I: IntoIterator<Item = T>,
@@ -29,7 +29,7 @@ impl Path {
         self.window_time
     }
 
-    pub fn limit(&self) -> Option<u16> {
+    pub fn limit(&self) -> Option<u32> {
         self.limit
     }
 }

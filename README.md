@@ -85,13 +85,19 @@ FLAGS:
     -V, --version    Prints version information
 
 OPTIONS:
-    -C, --config-path <config-path>      path to config file
-    -h, --host <host>                    Bind socket to this host. [default: 127.0.0.1]
-    -I, --ipaddr-limit <ipaddr-limit>    The maximum number of requests to allow from unique ip addresses inside a
-                                         window [default: 5]
-    -L, --limit <limit>                  The maximum number of requests to allow inside a window [default: 300]
-    -p, --port <port>                    Bind socket to this port. [default: 8000]
-    -W, --window-time <window-time>      The window time, in seconds [default: 100]
+    -c, --config-path <PATH>                path to config file
+    -h, --host <HOST>                       Bind socket to this host. [default: 127.0.0.1]
+    -I, --ip-addresses <IP,IP...>           IP Addresses to be specifically limited, with comma seperated values
+        --ip-addresses-limit <INT>          The maximum number of requests to allow in specified IP addresses
+        --ip-addresses-window-time <INT>    The window time for IP addresses, in seconds
+        --ipaddr-limit <INT>                The maximum number of requests to allow from specified ip addresses
+                                            [default: 5]
+    -L, --limit <INT>                       The maximum number of requests to allow inside a window [default: 300]
+        --path-limit <INT>                  The maximum number of requests to allow in specified paths
+        --path-window-time <INT>            The window time for paths, in seconds
+    -P, --paths <PATH,PATH...>              Paths to be specifically limited, with comma seperated values
+    -p, --port <PORT>                       Bind socket to this port. [default: 8000]
+        --window-time <INT>                 The window time, in seconds [default: 100]
 ```
 
 
