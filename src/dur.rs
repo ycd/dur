@@ -34,7 +34,7 @@ where
 
                 let mut allow = true;
 
-                if (v as u32) < self.config.limit() {
+                if (v as u32) > self.config.limit() {
                     allow = false
                 }
 
@@ -45,7 +45,9 @@ where
                             if ip_addrs.contains(&ip.clone()) {
                                 match self.config.ip_addresses_limit() {
                                     Some(limit) => {
-                                        if limit as usize > self.backend.unique_ip_addresses(id) {
+                                        if (limit as usize)
+                                            < self.backend.ip_address_count(id, ip.clone())
+                                        {
                                             allow = false
                                         }
                                     }
@@ -61,7 +63,6 @@ where
                 (allow, v)
             }
 
-            // TODO: handle error better
             Err(why) => {
                 eprintln!("an error occured: {}", why);
                 (false, 0)

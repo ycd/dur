@@ -1,4 +1,4 @@
-use std::{error::Error, time::Duration};
+use std::{error::Error, net::Ipv4Addr, time::Duration};
 
 use super::IpAndPath;
 
@@ -11,5 +11,5 @@ pub trait Backend {
     fn insert(&mut self, id: u64, ip_and_path: IpAndPath) -> Result<usize, Box<dyn Error>>;
     fn len(&self) -> usize;
     fn request_count(&self, id: u64) -> usize;
-    fn unique_ip_addresses(&self, id: u64) -> usize;
+    fn ip_address_count(&self, id: u64, ip: Ipv4Addr) -> usize;
 }

@@ -84,11 +84,14 @@ impl Backend for Memory {
         }
     }
 
-    fn unique_ip_addresses(&self, id: u64) -> usize {
+    fn ip_address_count(&self, id: u64, ip: Ipv4Addr) -> usize {
         match self.record.get(&id) {
             Some(v) => v
                 .iter()
-                .filter(|(_, ip_and_path)| ip_and_path.ip.is_some())
+                .filter(|(_, ip_and_path)| match ip_and_path.ip {
+                    Some(addr) => addr == ip,
+                    None => false,
+                })
                 .count(),
             None => 0,
         }
