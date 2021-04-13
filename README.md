@@ -73,7 +73,7 @@ window_time = 50
 ## Usage
 
 
-```bash
+```
 dur 0.1.0
 dur, lightweight, stateless, configurable rate limiter with extremely high-performance
 
