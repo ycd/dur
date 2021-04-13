@@ -20,7 +20,7 @@
 * Dur can work with a centralized caching systems such as Redis. 
 * Extremely high performance thanks to Rust, dur handles +20K request/s with 500 concurrency on a single core with 0.05s response time on average.
 * Provides highly configurable limiting
-    * Path based limiting [TODO]
+    * Path based limiting 
     * IP based limiting 
     * Service based limiting
 
@@ -131,14 +131,31 @@ GET /health
 #### Request
 
 ```
-GET /request/<id>
+POST /request
+```
+
+#### Example Payload
+
+```json
+{
+	"id": 8293489298213,
+	"path": "/abc/def/gef/asdf",
+	"ip": "10.27.104.15"
+}
 ```
 
 #### Response 
 
 ```json
 {
-    "allow": true
+  "allowed": true,
+  "metadata": {
+    "id": 8293489298213,
+    "x_ratelimit_remaning": 299,
+    "x_ratelimit_limit": 300,
+    "path": "/abc/def/gef/asdf",
+    "ip": "10.27.104.15"
+  }
 }
 ```
 
